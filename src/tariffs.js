@@ -152,8 +152,6 @@ const tariffs = [
     dailyCharge: 240,
     rates: [
       // Free period: 9pm–midnight, Monday–Friday only (daysOfWeek: 1–5).
-      // Note: the schema cannot fully enforce day-of-week billing logic;
-      // treat daysOfWeek as metadata for display/explanation purposes.
       {
         name: "Free (Mon–Fri nights)",
         centsPerKwh: 0,
