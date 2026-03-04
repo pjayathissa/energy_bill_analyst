@@ -17,9 +17,6 @@ const month = (d) => d.getMonth();
 /** Summer months in NZ: November through March (months 10,11,0,1,2). */
 const isSummer = (d) => [10, 11, 0, 1, 2].includes(month(d));
 
-/** Is it a weekend? */
-const isWeekend = (d) => d.getDay() === 0 || d.getDay() === 6;
-
 /** Get ISO week string for grouping. */
 function weekKey(d) {
   const start = new Date(d);
@@ -228,9 +225,9 @@ export function generateInsights(data, currentTariff) {
 
 /**
  * Compute estimated annual cost for a given tariff plan using the actual consumption data.
- * Plans use the same TOU format: rates[] with { centsPerKwh, startHour?, endHour?, days? }.
+ * Plans use the same TOU format: rates[] with { centsPerKwh, startHour?, endHour?, daysOfWeek? }.
  * The first rate without hour constraints is the base/default rate.
- * Rates with startHour/endHour/days are checked in order; first match wins.
+ * Rates with startHour/endHour/daysOfWeek are checked in order; first match wins.
  */
 export function annualCost(data, plan) {
   const first = data[0].timestamp;
