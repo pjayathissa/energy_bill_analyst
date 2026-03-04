@@ -228,46 +228,35 @@ export function generateInsights(data, currentTariff) {
 
 /**
  * Compute estimated annual cost for a given tariff plan using the actual consumption data.
+ * Plans use the same TOU format: rates[] with { centsPerKwh, startHour?, endHour?, days? }.
+ * The first rate without hour constraints is the base/default rate.
+ * Rates with startHour/endHour/days are checked in order; first match wins.
  */
 export function annualCost(data, plan) {
-  // Calculate the date range to annualise
   const first = data[0].timestamp;
   const last = data[data.length - 1].timestamp;
   const days = (last - first) / (1000 * 60 * 60 * 24);
   if (days < 1) return 0;
 
   const scaleFactor = 365 / days;
-
-  // Daily fixed charge
   const fixedCost = (plan.dailyCharge / 100) * 365;
 
-  // Energy cost
+  // Separate base rate (no time constraints) from TOU rates
+  const baseRateEntry = plan.rates.find((r) => r.startHour === undefined);
+  const touEntries = plan.rates.filter((r) => r.startHour !== undefined);
+  const baseRate = baseRateEntry ? baseRateEntry.centsPerKwh : plan.rates[0].centsPerKwh;
+
   let energyCost = 0;
-
-  // Check if this is the Contact "Good Weekends" plan (special handling)
-  const isGoodWeekends = plan.retailer === "Contact" && plan.plan === "Good Weekends";
-
   for (const d of data) {
-    let rate;
+    const h = hour(d.timestamp);
+    const dow = d.timestamp.getDay();
+    let rate = baseRate;
 
-    if (isGoodWeekends) {
-      rate = isWeekend(d.timestamp) ? 0 : plan.rates[0].centsPerKwh;
-    } else if (plan.rates.length === 1) {
-      // Flat rate
-      rate = plan.rates[0].centsPerKwh;
-    } else {
-      // Time-of-use: find applicable rate
-      const h = hour(d.timestamp);
-      rate = plan.rates[0].centsPerKwh; // default to first rate
-      for (const r of plan.rates) {
-        if (r.startHour !== undefined && r.endHour !== undefined) {
-          // Handle overnight ranges (e.g. 21–7)
-          if (r.startHour > r.endHour) {
-            if (h >= r.startHour || h < r.endHour) { rate = r.centsPerKwh; break; }
-          } else {
-            if (h >= r.startHour && h < r.endHour) { rate = r.centsPerKwh; break; }
-          }
-        }
+    for (const r of touEntries) {
+      const rDays = r.daysOfWeek || [0, 1, 2, 3, 4, 5, 6];
+      if (matchesTou(h, dow, { startHour: r.startHour, endHour: r.endHour, days: rDays })) {
+        rate = r.centsPerKwh;
+        break;
       }
     }
 
