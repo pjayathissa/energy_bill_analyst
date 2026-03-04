@@ -3,104 +3,128 @@
  *
  * Last validated: March 2026
  *
- * Sources: Retailer websites, Powerswitch (Consumer NZ)
+ * Sources: Retailer websites, Powerswitch (Consumer NZ), EA Regional Power Prices dashboard
  * Region: General / nationwide plans. Actual rates vary by network region.
  *         These are representative rates for common urban networks
  *         (Vector/Auckland, Wellington Electricity, Orion/Christchurch).
+ *
+ * IMPORTANT: Rates are updated as of early 2026, following the April 2025 DPP4 lines
+ *         charge increases which raised average NZ household bills by ~$10–25/month.
+ *         A further ~5% increase is expected from April 2026. Always verify current
+ *         rates via retailer websites or https://www.powerswitch.org.nz before use.
+ *
+ * MARKET CHANGES (2025):
+ *   - Frank Energy: closed August 2025, customers transferred to Genesis Energy.
+ *   - Flick Electric: sold to Meridian Energy (May 2025), brand retired ~Oct 2025,
+ *                     customers transferred to Meridian.
+ *   Both retailers have been removed from this database.
+ *
+ * LOW USER NOTE: The Low Fixed Charge Tariff regulation is being phased out by the
+ *   Government over 5 years from April 2022. Low-user daily charges are gradually
+ *   increasing across all retailers. The 30c/day cap no longer applies.
  *
  * To update: edit the plans array below. Each plan has:
  *   - retailer: company name
  *   - plan: plan name
  *   - type: "standard" | "low"  (standard vs low user)
  *   - dailyCharge: cents/day (incl. GST)
- *   - rates: array of { name, centsPerKwh, startHour?, endHour? }
+ *   - rates: array of { name, centsPerKwh, startHour?, endHour?, daysOfWeek? }
  *       If startHour/endHour are omitted, the rate applies all day (anytime).
  *       Hours are 0–23 in 24-hour format.
+ *       daysOfWeek: optional array of day numbers (0=Sun, 1=Mon ... 6=Sat).
+ *         If omitted, rate applies every day.
  *   - features: short description string
  */
 
 const tariffs = [
   // ── Mercury ──────────────────────────────────────────────
+  // Note: Mercury's plan is now branded "Everyday Rates". Separate TOU plan
+  // confirmed still available. Daily charge ~269c/day incl. GST (ex-GST ~$2.34/day
+  // per customer reports). Rates ~12–15% higher than 2024 following April 2025
+  // DPP4 increases and subsequent retail adjustments.
   {
     retailer: "Mercury",
-    plan: "Everyday",
+    plan: "Everyday Rates",
     type: "standard",
-    dailyCharge: 230,
-    rates: [{ name: "Anytime", centsPerKwh: 28.5 }],
-    features: "Simple flat rate, no peak/off-peak",
+    dailyCharge: 269,
+    rates: [{ name: "Anytime", centsPerKwh: 32.0 }],
+    features: "Simple flat rate, no peak/off-peak, no fixed term",
   },
   {
     retailer: "Mercury",
-    plan: "Everyday",
+    plan: "Everyday Rates",
     type: "low",
-    dailyCharge: 69,
-    rates: [{ name: "Anytime", centsPerKwh: 34.0 }],
-    features: "Low-user flat rate",
+    dailyCharge: 120,
+    rates: [{ name: "Anytime", centsPerKwh: 38.0 }],
+    features: "Low-user flat rate (LFC regulation being phased out — daily charge rising annually)",
   },
   {
     retailer: "Mercury",
     plan: "Time of Use",
     type: "standard",
-    dailyCharge: 230,
+    dailyCharge: 269,
     rates: [
-      { name: "Peak", centsPerKwh: 38.0, startHour: 7, endHour: 21 },
-      { name: "Off-peak", centsPerKwh: 16.5, startHour: 21, endHour: 7 },
+      { name: "Peak", centsPerKwh: 43.0, startHour: 7, endHour: 21 },
+      { name: "Off-peak", centsPerKwh: 19.0, startHour: 21, endHour: 7 },
     ],
     features: "Cheaper nights (9pm–7am)",
   },
 
   // ── Meridian ─────────────────────────────────────────────
+  // Note: Meridian acquired Flick Electric (May 2025) and Powershop customers.
+  // Rates updated to reflect post-DPP4 levels.
   {
     retailer: "Meridian",
     plan: "Simple",
     type: "standard",
-    dailyCharge: 207,
-    rates: [{ name: "Anytime", centsPerKwh: 27.8 }],
+    dailyCharge: 245,
+    rates: [{ name: "Anytime", centsPerKwh: 31.5 }],
     features: "Flat rate, no contract",
   },
   {
     retailer: "Meridian",
     plan: "Simple",
     type: "low",
-    dailyCharge: 69,
-    rates: [{ name: "Anytime", centsPerKwh: 33.5 }],
-    features: "Low-user flat rate",
+    dailyCharge: 120,
+    rates: [{ name: "Anytime", centsPerKwh: 37.5 }],
+    features: "Low-user flat rate (LFC regulation being phased out — daily charge rising annually)",
   },
   {
     retailer: "Meridian",
     plan: "Time of Use",
     type: "standard",
-    dailyCharge: 207,
+    dailyCharge: 245,
     rates: [
-      { name: "Peak", centsPerKwh: 37.5, startHour: 7, endHour: 21 },
-      { name: "Off-peak", centsPerKwh: 15.8, startHour: 21, endHour: 7 },
+      { name: "Peak", centsPerKwh: 42.5, startHour: 7, endHour: 21 },
+      { name: "Off-peak", centsPerKwh: 18.0, startHour: 21, endHour: 7 },
     ],
     features: "Cheaper nights (9pm–7am)",
   },
 
   // ── Genesis Energy ───────────────────────────────────────
+  // Note: Genesis absorbed Frank Energy customers (August 2025).
   {
     retailer: "Genesis",
     plan: "Energy Basic",
     type: "standard",
-    dailyCharge: 215,
-    rates: [{ name: "Anytime", centsPerKwh: 29.0 }],
+    dailyCharge: 252,
+    rates: [{ name: "Anytime", centsPerKwh: 32.5 }],
     features: "No frills flat rate",
   },
   {
     retailer: "Genesis",
     plan: "Energy Basic",
     type: "low",
-    dailyCharge: 69,
-    rates: [{ name: "Anytime", centsPerKwh: 34.5 }],
-    features: "Low-user flat rate",
+    dailyCharge: 120,
+    rates: [{ name: "Anytime", centsPerKwh: 38.5 }],
+    features: "Low-user flat rate (LFC regulation being phased out — daily charge rising annually)",
   },
   {
     retailer: "Genesis",
     plan: "Energy Plus",
     type: "standard",
-    dailyCharge: 230,
-    rates: [{ name: "Anytime", centsPerKwh: 27.5 }],
+    dailyCharge: 269,
+    rates: [{ name: "Anytime", centsPerKwh: 31.0 }],
     features: "Dual fuel discount available",
   },
 
@@ -109,39 +133,55 @@ const tariffs = [
     retailer: "Contact",
     plan: "Basic",
     type: "standard",
-    dailyCharge: 200,
-    rates: [{ name: "Anytime", centsPerKwh: 28.2 }],
+    dailyCharge: 240,
+    rates: [{ name: "Anytime", centsPerKwh: 32.0 }],
     features: "Simple flat rate, broadband bundle available",
   },
   {
     retailer: "Contact",
     plan: "Basic",
     type: "low",
-    dailyCharge: 69,
-    rates: [{ name: "Anytime", centsPerKwh: 33.8 }],
-    features: "Low-user flat rate",
+    dailyCharge: 120,
+    rates: [{ name: "Anytime", centsPerKwh: 37.8 }],
+    features: "Low-user flat rate (LFC regulation being phased out — daily charge rising annually)",
   },
   {
     retailer: "Contact",
     plan: "Good Nights",
     type: "standard",
-    dailyCharge: 200,
+    dailyCharge: 240,
     rates: [
-      { name: "Day", centsPerKwh: 32.0, startHour: 7, endHour: 21 },
-      { name: "Night", centsPerKwh: 0, startHour: 21, endHour: 7 },
+      // Free period: 9pm–midnight, Monday–Friday only (daysOfWeek: 1–5).
+      // Note: the schema cannot fully enforce day-of-week billing logic;
+      // treat daysOfWeek as metadata for display/explanation purposes.
+      {
+        name: "Free (Mon–Fri nights)",
+        centsPerKwh: 0,
+        startHour: 21,
+        endHour: 0,
+        daysOfWeek: [1, 2, 3, 4, 5],
+      },
+      { name: "All other times", centsPerKwh: 36.0 },
     ],
-    features: "Free power 9pm–7am (higher day rate)",
+    features: "Free power 9pm–midnight Mon–Fri only (smart meter required, fair use policy applies). Higher day rate offsets free period.",
   },
   {
     retailer: "Contact",
     plan: "Good Weekends",
     type: "standard",
-    dailyCharge: 200,
+    dailyCharge: 240,
     rates: [
-      { name: "Weekday", centsPerKwh: 30.0 },
-      { name: "Weekend", centsPerKwh: 0 },
+      // Free period: 9am–5pm Saturday and Sunday only.
+      {
+        name: "Free (Sat–Sun 9am–5pm)",
+        centsPerKwh: 0,
+        startHour: 9,
+        endHour: 17,
+        daysOfWeek: [0, 6],
+      },
+      { name: "All other times", centsPerKwh: 34.0 },
     ],
-    features: "Free power on weekends (higher weekday rate)",
+    features: "Free power 9am–5pm Sat & Sun only (smart meter required). Higher weekday/off-peak rate offsets free period.",
   },
 
   // ── Electric Kiwi ────────────────────────────────────────
@@ -149,75 +189,28 @@ const tariffs = [
     retailer: "Electric Kiwi",
     plan: "Kiwi",
     type: "standard",
-    dailyCharge: 199,
-    rates: [{ name: "Anytime", centsPerKwh: 27.0 }],
-    features: "1 free hour of power per day (Hour of Power)",
+    dailyCharge: 240,
+    rates: [{ name: "Anytime", centsPerKwh: 30.5 }],
+    features: "1 free hour of power per day (Hour of Power, time choosable between 9am–5pm or 9pm–7am)",
   },
   {
     retailer: "Electric Kiwi",
     plan: "Kiwi",
     type: "low",
-    dailyCharge: 69,
-    rates: [{ name: "Anytime", centsPerKwh: 32.5 }],
+    dailyCharge: 120,
+    rates: [{ name: "Anytime", centsPerKwh: 36.5 }],
     features: "Low-user + Hour of Power",
   },
   {
     retailer: "Electric Kiwi",
     plan: "MoveMaster",
     type: "standard",
-    dailyCharge: 179,
+    dailyCharge: 215,
     rates: [
-      { name: "Peak", centsPerKwh: 36.0, startHour: 7, endHour: 21 },
-      { name: "Off-peak", centsPerKwh: 14.5, startHour: 21, endHour: 7 },
+      { name: "Peak", centsPerKwh: 40.5, startHour: 7, endHour: 21 },
+      { name: "Off-peak", centsPerKwh: 16.5, startHour: 21, endHour: 7 },
     ],
     features: "Time of use + Hour of Power",
-  },
-
-  // ── Flick Electric ───────────────────────────────────────
-  {
-    retailer: "Flick Electric",
-    plan: "Flat",
-    type: "standard",
-    dailyCharge: 199,
-    rates: [{ name: "Anytime", centsPerKwh: 27.5 }],
-    features: "Simple flat rate, transparent pricing",
-  },
-  {
-    retailer: "Flick Electric",
-    plan: "Flat",
-    type: "low",
-    dailyCharge: 69,
-    rates: [{ name: "Anytime", centsPerKwh: 33.0 }],
-    features: "Low-user flat rate",
-  },
-  {
-    retailer: "Flick Electric",
-    plan: "Off Peak",
-    type: "standard",
-    dailyCharge: 199,
-    rates: [
-      { name: "Peak", centsPerKwh: 35.0, startHour: 7, endHour: 23 },
-      { name: "Off-peak", centsPerKwh: 14.0, startHour: 23, endHour: 7 },
-    ],
-    features: "Cheap overnight (11pm–7am)",
-  },
-
-  // ── Frank Energy ─────────────────────────────────────────
-  {
-    retailer: "Frank Energy",
-    plan: "Frank Plan",
-    type: "standard",
-    dailyCharge: 189,
-    rates: [{ name: "Anytime", centsPerKwh: 26.5 }],
-    features: "Low fixed charge, competitive variable rate",
-  },
-  {
-    retailer: "Frank Energy",
-    plan: "Frank Plan",
-    type: "low",
-    dailyCharge: 69,
-    rates: [{ name: "Anytime", centsPerKwh: 32.0 }],
-    features: "Low-user option",
   },
 
   // ── Octopus Energy ───────────────────────────────────────
@@ -225,16 +218,16 @@ const tariffs = [
     retailer: "Octopus Energy",
     plan: "Simple",
     type: "standard",
-    dailyCharge: 195,
-    rates: [{ name: "Anytime", centsPerKwh: 26.8 }],
+    dailyCharge: 235,
+    rates: [{ name: "Anytime", centsPerKwh: 30.5 }],
     features: "No lock-in, app-based management",
   },
   {
     retailer: "Octopus Energy",
     plan: "Simple",
     type: "low",
-    dailyCharge: 69,
-    rates: [{ name: "Anytime", centsPerKwh: 32.5 }],
+    dailyCharge: 120,
+    rates: [{ name: "Anytime", centsPerKwh: 36.5 }],
     features: "Low-user option",
   },
 
@@ -243,17 +236,17 @@ const tariffs = [
     retailer: "Nova Energy",
     plan: "Nova Plus",
     type: "standard",
-    dailyCharge: 220,
-    rates: [{ name: "Anytime", centsPerKwh: 28.0 }],
-    features: "Flat rate, online management",
+    dailyCharge: 258,
+    rates: [{ name: "Anytime", centsPerKwh: 31.5 }],
+    features: "Flat rate, online management, broadband/gas bundle discounts available",
   },
   {
     retailer: "Nova Energy",
     plan: "Nova Plus",
     type: "low",
-    dailyCharge: 69,
-    rates: [{ name: "Anytime", centsPerKwh: 33.5 }],
-    features: "Low-user flat rate",
+    dailyCharge: 120,
+    rates: [{ name: "Anytime", centsPerKwh: 37.5 }],
+    features: "Low-user flat rate (LFC regulation being phased out — daily charge rising annually)",
   },
 
   // ── Pulse Energy ─────────────────────────────────────────
@@ -261,34 +254,35 @@ const tariffs = [
     retailer: "Pulse Energy",
     plan: "Plus",
     type: "standard",
-    dailyCharge: 210,
-    rates: [{ name: "Anytime", centsPerKwh: 27.5 }],
+    dailyCharge: 248,
+    rates: [{ name: "Anytime", centsPerKwh: 31.0 }],
     features: "Prompt-pay discount available",
   },
   {
     retailer: "Pulse Energy",
     plan: "Plus",
     type: "low",
-    dailyCharge: 69,
-    rates: [{ name: "Anytime", centsPerKwh: 33.0 }],
+    dailyCharge: 120,
+    rates: [{ name: "Anytime", centsPerKwh: 37.0 }],
     features: "Low-user flat rate",
   },
 
   // ── Powershop ────────────────────────────────────────────
+  // Note: Powershop is owned by Meridian Energy.
   {
     retailer: "Powershop",
     plan: "All You Need",
     type: "standard",
-    dailyCharge: 215,
-    rates: [{ name: "Anytime", centsPerKwh: 28.0 }],
-    features: "Pre-purchase power packs for discounts",
+    dailyCharge: 252,
+    rates: [{ name: "Anytime", centsPerKwh: 31.5 }],
+    features: "Pre-purchase power packs for discounts (owned by Meridian Energy)",
   },
   {
     retailer: "Powershop",
     plan: "All You Need",
     type: "low",
-    dailyCharge: 69,
-    rates: [{ name: "Anytime", centsPerKwh: 33.5 }],
+    dailyCharge: 120,
+    rates: [{ name: "Anytime", centsPerKwh: 37.5 }],
     features: "Low-user with power pack option",
   },
 ];
