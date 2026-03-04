@@ -22,6 +22,10 @@
  * LOW USER NOTE: The Low Fixed Charge Tariff regulation is being phased out by the
  *   Government over 5 years from April 2022. Low-user daily charges are gradually
  *   increasing across all retailers. The 30c/day cap no longer applies.
+ *   Phase-out schedule (max daily charge, ex-GST): $0.90 (Apr 2023), $1.20 (Apr 2024),
+ *   $1.50 (Apr 2025), $1.80 (Apr 2026), fully removed Apr 2027.
+ *   As of March 2026, the regulated cap is $1.50/day ex-GST = ~$1.73/day incl. GST
+ *   (173c/day). Low-user dailyCharge values below reflect this April 2025 increase.
  *
  * To update: edit the plans array below. Each plan has:
  *   - retailer: company name
@@ -54,7 +58,7 @@ const tariffs = [
     retailer: "Mercury",
     plan: "Everyday Rates",
     type: "low",
-    dailyCharge: 120,
+    dailyCharge: 173,
     rates: [{ name: "Anytime", centsPerKwh: 38.0 }],
     features: "Low-user flat rate (LFC regulation being phased out — daily charge rising annually)",
   },
@@ -85,7 +89,7 @@ const tariffs = [
     retailer: "Meridian",
     plan: "Simple",
     type: "low",
-    dailyCharge: 120,
+    dailyCharge: 173,
     rates: [{ name: "Anytime", centsPerKwh: 37.5 }],
     features: "Low-user flat rate (LFC regulation being phased out — daily charge rising annually)",
   },
@@ -115,7 +119,7 @@ const tariffs = [
     retailer: "Genesis",
     plan: "Energy Basic",
     type: "low",
-    dailyCharge: 120,
+    dailyCharge: 173,
     rates: [{ name: "Anytime", centsPerKwh: 38.5 }],
     features: "Low-user flat rate (LFC regulation being phased out — daily charge rising annually)",
   },
@@ -141,7 +145,7 @@ const tariffs = [
     retailer: "Contact",
     plan: "Basic",
     type: "low",
-    dailyCharge: 120,
+    dailyCharge: 173,
     rates: [{ name: "Anytime", centsPerKwh: 37.8 }],
     features: "Low-user flat rate (LFC regulation being phased out — daily charge rising annually)",
   },
@@ -195,7 +199,7 @@ const tariffs = [
     retailer: "Electric Kiwi",
     plan: "Kiwi",
     type: "low",
-    dailyCharge: 120,
+    dailyCharge: 173,
     rates: [{ name: "Anytime", centsPerKwh: 36.5 }],
     features: "Low-user + Hour of Power",
   },
@@ -205,10 +209,15 @@ const tariffs = [
     type: "standard",
     dailyCharge: 215,
     rates: [
-      { name: "Peak", centsPerKwh: 40.5, startHour: 7, endHour: 21 },
-      { name: "Off-peak", centsPerKwh: 16.5, startHour: 21, endHour: 7 },
+      // Peak: 7am–9am AND 5pm–9pm, weekdays only (two separate windows).
+      // Rates are approximate for Vector/Auckland; vary by network. Off-peak night
+      // is marketed as "half price" relative to peak. Shoulder covers all other times.
+      { name: "Peak (morning)", centsPerKwh: 40.5, startHour: 7, endHour: 9, daysOfWeek: [1, 2, 3, 4, 5] },
+      { name: "Peak (evening)", centsPerKwh: 40.5, startHour: 17, endHour: 21, daysOfWeek: [1, 2, 3, 4, 5] },
+      { name: "Off-peak night", centsPerKwh: 20.0, startHour: 23, endHour: 7 },
+      { name: "Shoulder", centsPerKwh: 27.0 }, // catch-all: weekday midday + evenings 9–11pm, weekends 7am–11pm
     ],
-    features: "Time of use + Hour of Power",
+    features: "3-tier TOU: peak weekday mornings & evenings, shoulder daytime/weekends, half-price overnight (11pm–7am) + Hour of Power",
   },
 
   // ── Octopus Energy ───────────────────────────────────────
@@ -224,7 +233,7 @@ const tariffs = [
     retailer: "Octopus Energy",
     plan: "Simple",
     type: "low",
-    dailyCharge: 120,
+    dailyCharge: 173,
     rates: [{ name: "Anytime", centsPerKwh: 36.5 }],
     features: "Low-user option",
   },
@@ -242,7 +251,7 @@ const tariffs = [
     retailer: "Nova Energy",
     plan: "Nova Plus",
     type: "low",
-    dailyCharge: 120,
+    dailyCharge: 173,
     rates: [{ name: "Anytime", centsPerKwh: 37.5 }],
     features: "Low-user flat rate (LFC regulation being phased out — daily charge rising annually)",
   },
@@ -260,7 +269,7 @@ const tariffs = [
     retailer: "Pulse Energy",
     plan: "Plus",
     type: "low",
-    dailyCharge: 120,
+    dailyCharge: 173,
     rates: [{ name: "Anytime", centsPerKwh: 37.0 }],
     features: "Low-user flat rate",
   },
@@ -279,7 +288,7 @@ const tariffs = [
     retailer: "Powershop",
     plan: "All You Need",
     type: "low",
-    dailyCharge: 120,
+    dailyCharge: 173,
     rates: [{ name: "Anytime", centsPerKwh: 37.5 }],
     features: "Low-user with power pack option",
   },
