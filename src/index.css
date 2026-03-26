@@ -148,6 +148,19 @@ h3 {
   color: var(--grey-400);
 }
 
+.step.clickable {
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.step.clickable:hover {
+  opacity: 0.7;
+}
+
+.step.clickable:hover .step-label {
+  text-decoration: underline;
+}
+
 .step-connector {
   width: 40px;
   height: 2px;
