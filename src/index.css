@@ -755,14 +755,60 @@ h3 {
   border-left: 3px solid var(--green-500);
 }
 
-.insight-ev {
-  background: #f5f3ff;
-  border-left: 3px solid #8b5cf6;
-}
-
 .insight-solar {
   background: #eff6ff;
   border-left: 3px solid #3b82f6;
+}
+
+/* ── Baseload Options ────────────────────────────────── */
+.baseload-options {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.baseload-options-title {
+  font-weight: 600;
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+  color: #374151;
+}
+
+.baseload-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 0.25rem 0;
+}
+
+.baseload-checkbox input[type="checkbox"] {
+  accent-color: var(--coral-500);
+  width: 16px;
+  height: 16px;
+}
+
+.baseload-resolved {
+  margin-top: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: #f0fdf4;
+  border-left: 3px solid #22c55e;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #166534;
+}
+
+.baseload-still-high {
+  margin-top: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: #fef2f2;
+  border-left: 3px solid #ef4444;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #991b1b;
 }
 
 /* ── Plan Comparison Table ────────────────────────────── */

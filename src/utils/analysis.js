@@ -101,7 +101,7 @@ export function weeklyTrend(data) {
  * Generate bullet-point insights from the data and the user's current tariff.
  * currentTariff: { dailyCharge, peakRate, offPeakRate } in cents.
  */
-export function generateInsights(data, currentTariff) {
+export function generateInsights(data, currentTariff, nightLoadOptions = {}) {
   const insights = [];
 
   // 1. Nighttime baseload (midnight to 5am = slots 0–9)
@@ -111,9 +111,36 @@ export function generateInsights(data, currentTariff) {
     : 0;
   const nightBaseloadW = Math.round(avgNightKwh * 2 * 1000); // Convert half-hourly kWh to watts
 
+  // Subtract known night loads from the baseload (diversity-adjusted averages)
+  let knownLoadW = 0;
+  if (nightLoadOptions.ev) knownLoadW += 1000;        // ~1kW avg accounts for not charging every night
+  if (nightLoadOptions.hotWater) knownLoadW += 500;    // ~0.5kW avg for timer-controlled HWC
+  if (nightLoadOptions.battery) knownLoadW += 2000;    // ~2kW typical home battery charge rate
+
+  const adjustedBaseloadW = Math.max(0, nightBaseloadW - knownLoadW);
+  const hasKnownLoads = knownLoadW > 0;
+
+  const isHighRaw = nightBaseloadW > 500;
+  const isHighAdjusted = adjustedBaseloadW > 500;
+
+  let baseloadText = `Nighttime baseload (12am–5am): ${avgNightKwh.toFixed(3)} kWh per half hour (~${nightBaseloadW}W continuous).`;
+  if (hasKnownLoads) {
+    baseloadText += ` After subtracting known overnight loads (~${knownLoadW}W), the unexplained baseload is ~${adjustedBaseloadW}W.`;
+    baseloadText += isHighAdjusted
+      ? " This remaining load is still higher than typical — check for other appliances left running overnight."
+      : " This remaining load looks normal for a residential property.";
+  } else {
+    baseloadText += isHighRaw
+      ? " This is higher than typical — check for appliances left running overnight."
+      : " This looks normal for a residential property.";
+  }
+
   insights.push({
     type: "baseload",
-    text: `Nighttime baseload (12am–5am): ${avgNightKwh.toFixed(3)} kWh per half hour (~${nightBaseloadW}W continuous).${nightBaseloadW > 500 ? " This is higher than typical — check for appliances left running overnight." : " This looks normal for a residential property."}`,
+    isHighBaseload: hasKnownLoads ? isHighAdjusted : isHighRaw,
+    rawBaseloadW: nightBaseloadW,
+    adjustedBaseloadW,
+    text: baseloadText,
   });
 
   // 2. Seasonal variation
@@ -196,19 +223,7 @@ export function generateInsights(data, currentTariff) {
     }
   }
 
-  // 5. EV charging detection — look for consistent high-draw periods at night
-  const nightHigh = data.filter(
-    (d) => hour(d.timestamp) >= 22 || hour(d.timestamp) < 5
-  );
-  const highNightReadings = nightHigh.filter((d) => d.kwh > 2.5);
-  if (highNightReadings.length > nightHigh.length * 0.05) {
-    insights.push({
-      type: "ev",
-      text: `Detected periodic high overnight consumption (>2.5 kWh/half-hour) — this pattern is consistent with EV charging. If you have an EV, a time-of-use plan could reduce charging costs significantly.`,
-    });
-  }
-
-  // 6. Solar pattern detection — look for near-zero or negative midday readings
+  // 5. Solar pattern detection — look for near-zero or negative midday readings
   const middayData = data.filter((d) => hour(d.timestamp) >= 10 && hour(d.timestamp) < 14);
   const lowMidday = middayData.filter((d) => d.kwh < 0.05);
   if (lowMidday.length > middayData.length * 0.3) {
