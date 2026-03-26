@@ -145,15 +145,15 @@ export default function Dashboard({ data, currentTariff }) {
         {/* ── Average Daily Profile ── */}
         <section className="chart-section card-coral">
           <h3>Average Daily Consumption Profile</h3>
-          <p className="chart-desc">Average kWh per half-hour interval across the full dataset.</p>
+          <p className="chart-desc">Average kWh/h across the full dataset.</p>
           <ResponsiveContainer width="100%" height={300}>
             <AreaChart data={profile}>
               <CartesianGrid strokeDasharray="3 3" />
               {touAreas}
               <XAxis dataKey="hour" tickFormatter={(v, i) => tickFilter(v, i) ? v : ""} />
-              <YAxis unit=" kWh" />
+              <YAxis unit=" kWh/h" />
               <Tooltip />
-              <Area type="monotone" dataKey="kwh" stroke="#ff6b5b" fill="#ffc9c2" name="Avg kWh" />
+              <Area type="monotone" dataKey="kwh" stroke="#ff6b5b" fill="#ffc9c2" name="Avg kWh/h" />
             </AreaChart>
           </ResponsiveContainer>
           {currentTariff.touRates && currentTariff.touRates.length > 0 && (
@@ -188,11 +188,11 @@ export default function Dashboard({ data, currentTariff }) {
               <CartesianGrid strokeDasharray="3 3" />
               {touAreas}
               <XAxis dataKey="hour" tickFormatter={(v, i) => tickFilter(v, i) ? v : ""} />
-              <YAxis unit=" kWh" />
+              <YAxis unit=" kWh/h" />
               <Tooltip />
               <Legend />
-              <Line type="monotone" dataKey="summer" stroke="#ff8a7a" name="Summer" dot={false} />
-              <Line type="monotone" dataKey="winter" stroke="#3b82f6" name="Winter" dot={false} />
+              <Line type="monotone" dataKey="summer" stroke="#ff8a7a" name="Summer (kWh/h)" dot={false} />
+              <Line type="monotone" dataKey="winter" stroke="#3b82f6" name="Winter (kWh/h)" dot={false} />
             </LineChart>
           </ResponsiveContainer>
           {currentTariff.touRates && currentTariff.touRates.length > 0 && (
