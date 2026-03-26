@@ -99,7 +99,7 @@ function touReferenceAreas(touRates) {
 /**
  * Main analysis dashboard — charts, insights, and plan comparison table.
  */
-export default function Dashboard({ data, currentTariff }) {
+export default function Dashboard({ data, currentTariff, onStepClick }) {
   const [expandedRow, setExpandedRow] = useState(null);
   const [nightEv, setNightEv] = useState(false);
   const [nightHotWater, setNightHotWater] = useState(false);
@@ -138,7 +138,7 @@ export default function Dashboard({ data, currentTariff }) {
           {data.length.toLocaleString()} readings analysed.
           Estimated annual cost: <strong>${myCost.toLocaleString()}</strong>
         </p>
-        <StepIndicator currentStep="dashboard" />
+        <StepIndicator currentStep="dashboard" onStepClick={onStepClick} />
       </div>
 
       <div className="dash-content">
