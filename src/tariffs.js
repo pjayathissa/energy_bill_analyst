@@ -208,33 +208,57 @@ const tariffs = [
   // ── Electric Kiwi ────────────────────────────────────────
   {
     retailer: "Electric Kiwi",
-    plan: "Kiwi",
+    plan: "Everyday",
     type: "standard",
-    dailyCharge: 240,
-    rates: [{ name: "Anytime", centsPerKwh: 30.5 }],
-    features: "1 free hour of power per day (Hour of Power, time choosable between 9am–5pm or 9pm–7am)",
+    dailyCharge: 203,
+    rates: [
+      { name: "Peak", centsPerKwh: 39.25, startHour: 7, endHour: 9, daysOfWeek: [1, 2, 3, 4, 5] },
+      { name: "Peak (evening)", centsPerKwh: 39.25, startHour: 17, endHour: 21, daysOfWeek: [1, 2, 3, 4, 5] },
+      { name: "Shoulder", centsPerKwh: 39.25 }, // catch-all:
+    ],
+    features: "",
   },
   {
     retailer: "Electric Kiwi",
-    plan: "Kiwi",
+    plan: "Everyday",
     type: "low",
-    dailyCharge: 173,
-    rates: [{ name: "Anytime", centsPerKwh: 36.5 }],
-    features: "Low-user + Hour of Power",
+    dailyCharge: 172,
+    rates: [
+      { name: "Peak", centsPerKwh: 40.8, startHour: 7, endHour: 9, daysOfWeek: [1, 2, 3, 4, 5] },
+      { name: "Peak (evening)", centsPerKwh: 40.8, startHour: 17, endHour: 21, daysOfWeek: [1, 2, 3, 4, 5] },
+      { name: "Shoulder", centsPerKwh: 40.8 }, // catch-all:
+    ],
+    features: "",
   },
   {
     retailer: "Electric Kiwi",
     plan: "MoveMaster",
     type: "standard",
-    dailyCharge: 215,
+    dailyCharge: 203,
     rates: [
       // Peak: 7am–9am AND 5pm–9pm, weekdays only (two separate windows).
       // Rates are approximate for Vector/Auckland; vary by network. Off-peak night
       // is marketed as "half price" relative to peak. Shoulder covers all other times.
-      { name: "Peak (morning)", centsPerKwh: 40.5, startHour: 7, endHour: 9, daysOfWeek: [1, 2, 3, 4, 5] },
-      { name: "Peak (evening)", centsPerKwh: 40.5, startHour: 17, endHour: 21, daysOfWeek: [1, 2, 3, 4, 5] },
-      { name: "Off-peak night", centsPerKwh: 20.0, startHour: 23, endHour: 7 },
-      { name: "Shoulder", centsPerKwh: 27.0 }, // catch-all: weekday midday + evenings 9–11pm, weekends 7am–11pm
+      { name: "Peak (morning)", centsPerKwh: 52.99, startHour: 7, endHour: 9, daysOfWeek: [1, 2, 3, 4, 5] },
+      { name: "Peak (evening)", centsPerKwh: 52.99, startHour: 17, endHour: 21, daysOfWeek: [1, 2, 3, 4, 5] },
+      { name: "Off-peak night", centsPerKwh: 26.5, startHour: 23, endHour: 7 },
+      { name: "Shoulder", centsPerKwh: 31.8 }, // catch-all: weekday midday + evenings 9–11pm, weekends 7am–11pm
+    ],
+    features: "3-tier TOU: peak weekday mornings & evenings, shoulder daytime/weekends, half-price overnight (11pm–7am) + Hour of Power",
+  },
+  {
+    retailer: "Electric Kiwi",
+    plan: "MoveMaster",
+    type: "low",
+    dailyCharge: 115,
+    rates: [
+      // Peak: 7am–9am AND 5pm–9pm, weekdays only (two separate windows).
+      // Rates are approximate for Vector/Auckland; vary by network. Off-peak night
+      // is marketed as "half price" relative to peak. Shoulder covers all other times.
+      { name: "Peak (morning)", centsPerKwh: 59.37, startHour: 7, endHour: 9, daysOfWeek: [1, 2, 3, 4, 5] },
+      { name: "Peak (evening)", centsPerKwh: 59.37, startHour: 17, endHour: 21, daysOfWeek: [1, 2, 3, 4, 5] },
+      { name: "Off-peak night", centsPerKwh: 29.68, startHour: 23, endHour: 7 },
+      { name: "Shoulder", centsPerKwh: 35.62 }, // catch-all: weekday midday + evenings 9–11pm, weekends 7am–11pm
     ],
     features: "3-tier TOU: peak weekday mornings & evenings, shoulder daytime/weekends, half-price overnight (11pm–7am) + Hour of Power",
   },
@@ -242,55 +266,79 @@ const tariffs = [
   // ── Octopus Energy ───────────────────────────────────────
   {
     retailer: "Octopus Energy",
-    plan: "Simple",
+    plan: "Standard User",
     type: "standard",
-    dailyCharge: 235,
-    rates: [{ name: "Anytime", centsPerKwh: 30.5 }],
+    dailyCharge: 366.1,
+    rates: [
+
+      { name: "Peak (morning)", centsPerKwh: 32.1, startHour: 7, endHour: 11, daysOfWeek: [1, 2, 3, 4, 5] },
+      { name: "Peak (evening)", centsPerKwh: 32.1, startHour: 17, endHour: 21, daysOfWeek: [1, 2, 3, 4, 5] },
+      { name: "Off-peak night", centsPerKwh: 16.0, startHour: 23, endHour: 7 },
+      { name: "Off-Peak", centsPerKwh: 24.0 }, // catch-all: 
+    ],
     features: "No lock-in, app-based management",
   },
   {
     retailer: "Octopus Energy",
-    plan: "Simple",
+    plan: "Standard User",
     type: "low",
-    dailyCharge: 173,
-    rates: [{ name: "Anytime", centsPerKwh: 36.5 }],
-    features: "Low-user option",
+    dailyCharge: 172.5,
+    rates: [
+  
+      { name: "Peak (morning)", centsPerKwh: 42.6, startHour: 7, endHour: 11, daysOfWeek: [1, 2, 3, 4, 5] },
+      { name: "Peak (evening)", centsPerKwh: 42.6, startHour: 17, endHour: 21, daysOfWeek: [1, 2, 3, 4, 5] },
+      { name: "Off-peak night", centsPerKwh: 21.3, startHour: 23, endHour: 7 },
+      { name: "Off-Peak", centsPerKwh: 34.6 }, // catch-all: 
+    ],
+    features: "No lock-in, app-based management",
   },
 
   // ── Nova Energy ──────────────────────────────────────────
   {
     retailer: "Nova Energy",
-    plan: "Nova Plus",
+    plan: "Electricity Only",
     type: "standard",
-    dailyCharge: 258,
-    rates: [{ name: "Anytime", centsPerKwh: 31.5 }],
-    features: "Flat rate, online management, broadband/gas bundle discounts available",
+    dailyCharge: 363.876,
+    rates: [
+
+      { name: "Day", centsPerKwh: 33.979, startHour: 7, endHour: 11, },
+      { name: "Night", centsPerKwh: 24.741, startHour: 21, endHour: 7 },
+    ],
+    features: "",
   },
   {
     retailer: "Nova Energy",
-    plan: "Nova Plus",
+    plan: "Electricity Only",
     type: "low",
-    dailyCharge: 173,
-    rates: [{ name: "Anytime", centsPerKwh: 37.5 }],
-    features: "Low-user flat rate (LFC regulation being phased out — daily charge rising annually)",
+    dailyCharge: 207,
+    rates: [
+
+      { name: "Day", centsPerKwh: 41.137, startHour: 7, endHour: 11, },
+      { name: "Night", centsPerKwh: 31.899, startHour: 21, endHour: 7 },
+    ],
+    features: "",
   },
 
   // ── Pulse Energy ─────────────────────────────────────────
   {
     retailer: "Pulse Energy",
-    plan: "Plus",
+    plan: "Anytime",
     type: "standard",
-    dailyCharge: 248,
-    rates: [{ name: "Anytime", centsPerKwh: 31.0 }],
-    features: "Prompt-pay discount available",
+    dailyCharge: 363.630,
+    rates: [
+
+      { name: "Day", centsPerKwh: 34.326, startHour: 7, endHour: 11, },
+      { name: "Night", centsPerKwh: 29.818, startHour: 21, endHour: 7 },
+    ],
+    features: "Price Promise Available",
   },
   {
     retailer: "Pulse Energy",
-    plan: "Plus",
+    plan: "Anytime",
     type: "low",
-    dailyCharge: 173,
-    rates: [{ name: "Anytime", centsPerKwh: 37.0 }],
-    features: "Low-user flat rate",
+    dailyCharge: 207.000,
+    rates: [{ name: "Anytime", centsPerKwh: 39.685 }],
+    features: "Price Promise Available",
   },
 
   // ── Powershop ────────────────────────────────────────────
@@ -299,17 +347,25 @@ const tariffs = [
     retailer: "Powershop",
     plan: "All You Need",
     type: "standard",
-    dailyCharge: 252,
-    rates: [{ name: "Anytime", centsPerKwh: 31.5 }],
-    features: "Pre-purchase power packs for discounts (owned by Meridian Energy)",
+    dailyCharge: 313.03,
+    rates: [
+
+      { name: "Peak", centsPerKwh: 37.09, startHour: 7, endHour: 11, },
+      { name: "Night", centsPerKwh: 22.75, startHour: 21, endHour: 7 },
+    ],
+    features: "Website doesn't specify when peak/offpeak hours are, but we assume them here",
   },
   {
     retailer: "Powershop",
     plan: "All You Need",
     type: "low",
-    dailyCharge: 173,
-    rates: [{ name: "Anytime", centsPerKwh: 37.5 }],
-    features: "Low-user with power pack option",
+    dailyCharge: 195.5,
+    rates: [
+
+      { name: "Peak", centsPerKwh: 42.45, startHour: 7, endHour: 11, },
+      { name: "Night", centsPerKwh: 28.11, startHour: 21, endHour: 7 },
+    ],
+    features: "Website doesn't specify when peak/offpeak hours are, but we assume them here",
   },
 ];
 
